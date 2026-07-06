@@ -101,7 +101,7 @@
             transform: translateY(-2px);
         }
 
-        /* Banner */
+        /*  Banner */
         .terminal-banner {
             background: linear-gradient(135deg, #0b1329 0%, #1c2541 100%);
             border-bottom: 3px solid var(--accent-cyan);
@@ -146,7 +146,7 @@
             margin: 0 auto;
         }
 
-        /* Core Layout */
+        /* Container */
         .wrapper {
             max-width: 1200px;
             margin: 40px auto;
@@ -205,7 +205,7 @@
             transform: translateY(-2px);
         }
 
-        /* Control Dashboard Tabs */
+        /*  Dashboard */
         .filter-control-panel {
             display: flex;
             gap: 10px;
@@ -237,7 +237,7 @@
             border-color: var(--accent-cyan);
         }
 
-        /* Status Console */
+        /* Status */
         .console-status {
             margin-top: 20px;
             padding: 15px;
@@ -257,7 +257,7 @@
             border-left: 4px solid #ef4444;
         }
 
-        /* Inspector Viewports */
+        /* Inspector  Viewports */
         .inspection-dashboard {
             margin-top: 25px;
         }
@@ -308,12 +308,37 @@
             font-weight: 600;
         }
 
+        /* Copy Button */
+        .copy-btn {
+            background-color: #1e293b;
+            color: var(--accent-cyan);
+            border: 1px solid #334155;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent-cyan);
+            color: #030712;
+        }
+
         .node-badge {
             font-size: 11px;
             font-weight: 700;
             padding: 3px 8px;
             border-radius: 4px;
             text-transform: uppercase;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         pre {
@@ -343,81 +368,75 @@
 </head>
 <body>
 
-    <!-- Security  Locker -->
     <div id="securityGateOverlay">
         <div class="gate-card">
             <div class="gate-icon">🔒</div>
-            <div class="gate-title">Tool Access Locked</div>
+            <div class="gate-title">Tool Locked</div>
             <div class="gate-instruction">
-                Please follow my WhatsApp channel to unlock this tool.
+                Please follow my WhatsApp channel to and unlock this tool.
             </div>
-            <!-- CHANNEL LINK -->
             <a href="https://whatsapp.com/channel/YOUR_CHANNEL_ID_HERE" target="_blank" class="action-link-btn" onclick="registerIntentUnlock()">
-                Follow My WhatsApp Channel
+                Follow Channel
             </a>
         </div>
     </div>
 
-    <!-- Header Section -->
     <div class="terminal-banner">
-        <div class="banner-title">Nawab Zada Code Inspector Tool</div>
+        <div class="banner-title">Nawab Code Inspector Tool</div>
         <div class="banner-developer">Developer: <span class="developer-tag">Nawab Zada Hacker ☠️🙌🦅</span></div>
         <div class="banner-disclaimer">
-            ⚠️ <strong>WARNING:</strong> This tool is only for Educational purposes please don't use wrong. Authors are not responsible for cross-boundary validation actions.
+            ⚠️ <strong>WARNING:</strong> This tool is only for Educational purposes please don't use wrong.
         </div>
     </div>
 
     <div class="wrapper">
-        <!-- Target link Scan -->
         <div class="search-container">
             <div class="search-row">
                 <input type="text" id="targetSystemUrl" placeholder="Paste website link to view secure code (e.g., domain.com)">
                 <button onclick="triggerDeepAudit()">View Code</button>
             </div>
             
-            <!-- Context Layout Dynamic Filters (Toggled Post Execution) -->
             <div class="filter-control-panel" id="dashboardControls" style="display: none;">
                 <button class="filter-btn active-node" onclick="toggleContextView('html-panel', this)">View HTML Code</button>
                 <button class="filter-btn" onclick="toggleContextView('full-panel', this)">View Full Code</button>
             </div>
         </div>
 
-        <!-- Terminal System Logs Output -->
         <div id="consoleStatusLog" class="console-status"></div>
 
-        <!-- Analytical Output Workspace -->
         <div id="dashboardWorkspace" class="inspection-dashboard" style="display: none;">
             
-            <!-- VIEW MODE A: HTML VIEW -->
             <div id="html-panel" class="view-panel-node active-panel">
-                <div class="pipeline-title">⚡ View HTML Source Code</div>
+                <div class="pipeline-title">⚡ HTML Code</div>
                 <div class="node-box">
                     <div class="node-header">
                         <span class="node-file-name" id="isolatedHtmlName">index.html</span>
-                        <span class="node-badge" style="background-color: rgba(56, 189, 248, 0.1); color: var(--accent-cyan);">HTML5 Standard</span>
+                        <div class="header-actions">
+                            <span class="node-badge" style="background-color: rgba(56, 189, 248, 0.1); color: var(--accent-cyan);">HTML</span>
+                            <button class="copy-btn" onclick="copyToClipboard('isolatedHtmlDisplay', this)">Copy Code</button>
+                        </div>
                     </div>
                     <pre><code id="isolatedHtmlDisplay"></code></pre>
                 </div>
             </div>
 
-            <!-- VIEW MODE B: FULL  CODE VIEW -->
             <div id="full-panel" class="view-panel-node">
-                <!-- Primary Document Block -->
-                <div class="pipeline-title">📄 Root DOM Core Layout</div>
+                <div class="pipeline-title">📄 Main Website HTML</div>
                 <div class="node-box">
                     <div class="node-header">
-                        <span class="node-file-name" id="mainHtmlName">Root Entrypoint Context</span>
-                        <span class="node-badge" style="background-color: rgba(56, 189, 248, 0.1); color: var(--accent-cyan);">Core Index</span>
+                        <span class="node-file-name" id="mainHtmlName">index.html</span>
+                        <div class="header-actions">
+                            <span class="node-badge" style="background-color: rgba(56, 189, 248, 0.1); color: var(--accent-cyan);">HTML</span>
+                            <button class="copy-btn" onclick="copyToClipboard('coreHtmlDisplay', this)">Copy Code</button>
+                        </div>
                     </div>
                     <pre><code id="coreHtmlDisplay"></code></pre>
                 </div>
 
-                <!-- JavaScript Segment Tree -->
-                <div class="pipeline-title">📦 Linked Production JavaScript Ecosystem</div>
+                <div class="pipeline-title">JavaScript Files</div>
                 <div id="javascriptVulnerabilityGrid"></div>
 
-                <!-- CSS Style Specification Chains -->
-                <div class="pipeline-title">🎨 Linked Layout CSS Style Schemes</div>
+                <div class="pipeline-title">CSS Files</div>
                 <div id="cssStylingGrid"></div>
             </div>
 
@@ -433,10 +452,7 @@
         });
 
         function registerIntentUnlock() {
-            // Set dynamic hook token status flags
             sessionStorage.setItem("gate_intent_active", "pending_focus");
-            
-            // Watch window state configuration changes safely
             window.addEventListener('focus', verifyGateUnlockChain);
         }
 
@@ -444,21 +460,35 @@
             if (sessionStorage.getItem("gate_intent_active") === "pending_focus") {
                 sessionStorage.removeItem("gate_intent_active");
                 sessionStorage.setItem("gate_auth_token", "resolved_verified");
-                
-                // Fade out interface security wall overlay gracefully
                 document.getElementById("securityGateOverlay").style.display = "none";
                 window.removeEventListener('focus', verifyGateUnlockChain);
             }
         }
 
         function toggleContextView(panelId, targetButton) {
-            // Remove selection visibility parameters across standard nodes
             document.querySelectorAll('.view-panel-node').forEach(panel => panel.classList.remove('active-panel'));
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-node'));
             
-            // Activate selected system component blocks
             document.getElementById(panelId).classList.add('active-panel');
             targetButton.classList.add('active-node');
+        }
+
+        // Copy to Clipboard 
+        function copyToClipboard(elementId, btn) {
+            const codeText = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = "Copied!";
+                btn.style.backgroundColor = "var(--accent-green)";
+                btn.style.color = "#ffffff";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.backgroundColor = "#1e293b";
+                    btn.style.color = "var(--accent-cyan)";
+                }, 2000);
+            }).catch(err => {
+                alert("Failed to copy code: " + err);
+            });
         }
 
         async function triggerDeepAudit() {
@@ -468,19 +498,17 @@
             const dashboardControls = document.getElementById('dashboardControls');
             
             if(!urlInput) {
-                alert('Terminal Request Aborted: Targeted system entry boundary field validation failed.');
+                alert('Please enter a valid website link.');
                 return;
             }
 
-            // Interface Control Configurations
             consoleStatusLog.className = "console-status loading";
-            consoleStatusLog.innerHTML = "🏁 <strong>Pipeline Event:</strong> Initializing core inspection routines against target address logs...";
+            consoleStatusLog.innerHTML = "⏳ <strong>Status:</strong> Connecting to target website and extracting source files...";
             consoleStatusLog.style.display = "block";
             dashboardWorkspace.style.display = "none";
             dashboardControls.style.display = "none";
 
             try {
-                // Request validation parameters sent directly down backend stack channel links
                 const response = await fetch('/api/fetch-source', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -489,57 +517,58 @@
 
                 const dataset = await response.json();
 
-                if (!response.ok) throw new Error(dataset.error || "System Pipeline Core Violation");
+                if (!response.ok) throw new Error(dataset.error || "Failed to fetch website files.");
 
-                // Bind response stream text configurations safely to viewer layouts
                 document.getElementById('isolatedHtmlDisplay').innerText = dataset.html;
-                document.getElementById('mainHtmlName').innerText = "Main Source: " + urlInput + " (Root Structural Context)";
+                document.getElementById('mainHtmlName').innerText = "index.html (Source: " + urlInput + ")";
                 document.getElementById('coreHtmlDisplay').innerText = dataset.html;
 
-                // Build out script directory mapping arrays inside workspace
                 const jsGrid = document.getElementById('javascriptVulnerabilityGrid');
                 if(!dataset.scripts || dataset.scripts.length === 0) {
-                    jsGrid.innerHTML = '<div class="node-box"><div class="empty-log">Zero external javascript asset paths loaded.</div></div>';
+                    jsGrid.innerHTML = '<div class="node-box"><div class="empty-log">No external JavaScript files found on this website.</div></div>';
                 } else {
                     jsGrid.innerHTML = dataset.scripts.map((script, idx) => `
                         <div class="node-box">
                             <div class="node-header">
-                                <span class="node-file-name">Script Link [${idx + 1}]: ${script.filename}</span>
-                                <span class="node-badge" style="background-color: rgba(245, 158, 11, 0.1); color: var(--accent-amber);">JS Tree Asset</span>
+                                <span class="node-file-name">File [${idx + 1}]: ${script.filename}</span>
+                                <div class="header-actions">
+                                    <span class="node-badge" style="background-color: rgba(245, 158, 11, 0.1); color: var(--accent-amber);">JS File</span>
+                                    <button class="copy-btn" onclick="copyToClipboard('js-code-${idx}', this)">Copy Code</button>
+                                </div>
                             </div>
-                            <pre><code>${sanitizeStructuralData(script.code)}</code></pre>
+                            <pre><code id="js-code-${idx}">${sanitizeStructuralData(script.code)}</code></pre>
                         </div>
                     `).join('');
                 }
 
-                // Build out layout css configuration arrays inside workspace
                 const cssGrid = document.getElementById('cssStylingGrid');
                 if(!dataset.styles || dataset.styles.length === 0) {
-                    cssGrid.innerHTML = '<div class="node-box"><div class="empty-log">Zero stylesheet references discovered during active execution.</div></div>';
+                    cssGrid.innerHTML = '<div class="node-box"><div class="empty-log">No external CSS files found on this website.</div></div>';
                 } else {
                     cssGrid.innerHTML = dataset.styles.map((style, idx) => `
                         <div class="node-box">
                             <div class="node-header">
-                                <span class="node-file-name">CSS Link [${idx + 1}]: ${style.filename}</span>
-                                <span class="node-badge" style="background-color: rgba(16, 185, 129, 0.1); color: var(--accent-green);">CSS Sheet Asset</span>
+                                <span class="node-file-name">File [${idx + 1}]: ${style.filename}</span>
+                                <div class="header-actions">
+                                    <span class="node-badge" style="background-color: rgba(16, 185, 129, 0.1); color: var(--accent-green);">CSS File</span>
+                                    <button class="copy-btn" onclick="copyToClipboard('css-code-${idx}', this)">Copy Code</button>
+                                </div>
                             </div>
-                            <pre><code>${sanitizeStructuralData(style.code)}</code></pre>
+                            <pre><code id="css-code-${idx}">${sanitizeStructuralData(style.code)}</code></pre>
                         </div>
                     `).join('');
                 }
 
-                // Present views to clients
                 consoleStatusLog.style.display = "none";
                 dashboardWorkspace.style.display = "block";
                 dashboardControls.style.display = "flex";
 
             } catch (ex) {
                 consoleStatusLog.className = "console-status error";
-                consoleStatusLog.innerHTML = "❌ <strong>Pipeline System Exception:</strong> " + ex.message;
+                consoleStatusLog.innerHTML = "❌ <strong>Error:</strong> " + ex.message;
             }
         }
 
-        // Escape string data formatting prevents rendering script injection payloads in runtime
         function sanitizeStructuralData(rawSnippet) {
             if(!rawSnippet) return "";
             return rawSnippet.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
