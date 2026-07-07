@@ -11,6 +11,7 @@
             --accent-cyan: #38bdf8;
             --accent-green: #10b981;
             --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
             --border-color: #1e293b;
             --text-main: #f1f5f9;
             --lock-overlay-bg: rgba(3, 7, 18, 0.98);
@@ -101,7 +102,7 @@
             transform: translateY(-2px);
         }
 
-        /*  Banner */
+        /* Banner */
         .terminal-banner {
             background: linear-gradient(135deg, #0b1329 0%, #1c2541 100%);
             border-bottom: 3px solid var(--accent-cyan);
@@ -111,7 +112,7 @@
         }
 
         .banner-title {
-            font-size: 42px;
+            font-size: 36px;
             font-weight: 800;
             color: var(--accent-cyan);
             letter-spacing: 3px;
@@ -205,9 +206,10 @@
             transform: translateY(-2px);
         }
 
-        /*  Dashboard */
+        /* Dashboard Tabs */
         .filter-control-panel {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin-top: 20px;
             border-top: 1px solid var(--border-color);
@@ -237,27 +239,29 @@
             border-color: var(--accent-cyan);
         }
 
-        /* Status */
+        /* Status & Terminal Console Logs */
         .console-status {
             margin-top: 20px;
-            padding: 15px;
+            padding: 20px;
             border-radius: 6px;
             display: none;
             font-family: monospace;
             font-size: 14px;
+            line-height: 1.8;
+            background-color: #020617;
+            border: 1px solid var(--border-color);
         }
         .loading {
-            background-color: #1e293b;
             color: var(--accent-cyan);
             border-left: 4px solid var(--accent-cyan);
         }
         .error {
-            background-color: #451a03;
             color: #fca5a5;
             border-left: 4px solid #ef4444;
+            background-color: #451a03;
         }
 
-        /* Inspector  Viewports */
+        /* Inspector Viewports */
         .inspection-dashboard {
             margin-top: 25px;
         }
@@ -364,6 +368,23 @@
             padding: 20px;
             font-size: 14px;
         }
+
+        .api-list {
+            padding: 20px;
+            margin: 0;
+            list-style: none;
+        }
+
+        .api-item {
+            font-family: monospace;
+            background-color: #0f172a;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--accent-amber);
+            color: #e2e8f0;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -373,7 +394,7 @@
             <div class="gate-icon">🔒</div>
             <div class="gate-title">Tool Locked</div>
             <div class="gate-instruction">
-                Please follow my WhatsApp channel to and unlock this tool.
+                Please follow my WhatsApp channel to unlock this tool.
             </div>
             <a href="https://whatsapp.com/channel/YOUR_CHANNEL_ID_HERE" target="_blank" class="action-link-btn" onclick="registerIntentUnlock()">
                 Follow Channel
@@ -399,6 +420,7 @@
             <div class="filter-control-panel" id="dashboardControls" style="display: none;">
                 <button class="filter-btn active-node" onclick="toggleContextView('html-panel', this)">View HTML Code</button>
                 <button class="filter-btn" onclick="toggleContextView('full-panel', this)">View Full Code</button>
+                <button class="filter-btn" onclick="toggleContextView('api-panel', this)" style="border-color: var(--accent-amber); color: var(--accent-amber);">View Extracted APIs</button>
             </div>
         </div>
 
@@ -407,7 +429,7 @@
         <div id="dashboardWorkspace" class="inspection-dashboard" style="display: none;">
             
             <div id="html-panel" class="view-panel-node active-panel">
-                <div class="pipeline-title">⚡ HTML Code</div>
+                <div class="pipeline-title">HTML Code</div>
                 <div class="node-box">
                     <div class="node-header">
                         <span class="node-file-name" id="isolatedHtmlName">index.html</span>
@@ -421,7 +443,7 @@
             </div>
 
             <div id="full-panel" class="view-panel-node">
-                <div class="pipeline-title">📄 Main Website HTML</div>
+                <div class="pipeline-title">Website HTML</div>
                 <div class="node-box">
                     <div class="node-header">
                         <span class="node-file-name" id="mainHtmlName">index.html</span>
@@ -440,11 +462,21 @@
                 <div id="cssStylingGrid"></div>
             </div>
 
+            <div id="api-panel" class="view-panel-node">
+                <div class="pipeline-title">Backend API Endpoints</div>
+                <div class="node-box">
+                    <div class="node-header">
+                        <span class="node-file-name">Hidden Server Gateways Discovered</span>
+                        <span class="node-badge" style="background-color: rgba(245, 158, 11, 0.1); color: var(--accent-amber);">API Logs</span>
+                    </div>
+                    <ul id="apiDiscoveryList" class="api-list"></ul>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        // Check locker status integrity rule pattern on load state
         document.addEventListener("DOMContentLoaded", function() {
             if (sessionStorage.getItem("gate_auth_token") === "resolved_verified") {
                 document.getElementById("securityGateOverlay").style.display = "none";
@@ -473,7 +505,6 @@
             targetButton.classList.add('active-node');
         }
 
-        // Copy to Clipboard 
         function copyToClipboard(elementId, btn) {
             const codeText = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(codeText).then(() => {
@@ -503,10 +534,15 @@
             }
 
             consoleStatusLog.className = "console-status loading";
-            consoleStatusLog.innerHTML = "⏳ <strong>Status:</strong> Connecting to target website and extracting source files...";
             consoleStatusLog.style.display = "block";
             dashboardWorkspace.style.display = "none";
             dashboardControls.style.display = "none";
+
+            // Terminal 
+            consoleStatusLog.innerHTML = `[+] Initializing Nawab Zada Secure Code inspector Engine...<br>`;
+            
+            setTimeout(() => { consoleStatusLog.innerHTML += `[+] Bypassing client-side script blockers & restrictions...<br>`; }, 4000);
+            setTimeout(() => { consoleStatusLog.innerHTML += `[+] Fetching server raw response packets...<br>`; }, 4000);
 
             try {
                 const response = await fetch('/api/fetch-source', {
@@ -516,13 +552,13 @@
                 });
 
                 const dataset = await response.json();
-
                 if (!response.ok) throw new Error(dataset.error || "Failed to fetch website files.");
 
                 document.getElementById('isolatedHtmlDisplay').innerText = dataset.html;
                 document.getElementById('mainHtmlName').innerText = "index.html (Source: " + urlInput + ")";
                 document.getElementById('coreHtmlDisplay').innerText = dataset.html;
 
+                // JS Grid Render
                 const jsGrid = document.getElementById('javascriptVulnerabilityGrid');
                 if(!dataset.scripts || dataset.scripts.length === 0) {
                     jsGrid.innerHTML = '<div class="node-box"><div class="empty-log">No external JavaScript files found on this website.</div></div>';
@@ -541,6 +577,7 @@
                     `).join('');
                 }
 
+                // CSS Grid Render
                 const cssGrid = document.getElementById('cssStylingGrid');
                 if(!dataset.styles || dataset.styles.length === 0) {
                     cssGrid.innerHTML = '<div class="node-box"><div class="empty-log">No external CSS files found on this website.</div></div>';
@@ -556,6 +593,16 @@
                             </div>
                             <pre><code id="css-code-${idx}">${sanitizeStructuralData(style.code)}</code></pre>
                         </div>
+                    `).join('');
+                }
+
+                // API Discovery Render
+                const apiList = document.getElementById('apiDiscoveryList');
+                if(!dataset.endpoints || dataset.endpoints.length === 0) {
+                    apiList.innerHTML = '<div class="empty-log">No dynamic backend API paths detected in static analysis.</div>';
+                } else {
+                    apiList.innerHTML = dataset.endpoints.map(endpoint => `
+                        <li class="api-item">📍 ${endpoint}</li>
                     `).join('');
                 }
 
