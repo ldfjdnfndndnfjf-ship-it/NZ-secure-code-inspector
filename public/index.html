@@ -463,10 +463,10 @@
             </div>
 
             <div id="api-panel" class="view-panel-node">
-                <div class="pipeline-title">Backend API Endpoints</div>
+                <div class="pipeline-title">Backend API Endpoint</div>
                 <div class="node-box">
                     <div class="node-header">
-                        <span class="node-file-name">Hidden Server Gateways Discovered</span>
+                        <span class="node-file-name">Hidden Server Discovered</span>
                         <span class="node-badge" style="background-color: rgba(245, 158, 11, 0.1); color: var(--accent-amber);">API Logs</span>
                     </div>
                     <ul id="apiDiscoveryList" class="api-list"></ul>
@@ -558,7 +558,7 @@
                 document.getElementById('mainHtmlName').innerText = "index.html (Source: " + urlInput + ")";
                 document.getElementById('coreHtmlDisplay').innerText = dataset.html;
 
-                // JS Grid Render
+                // JS files Render
                 const jsGrid = document.getElementById('javascriptVulnerabilityGrid');
                 if(!dataset.scripts || dataset.scripts.length === 0) {
                     jsGrid.innerHTML = '<div class="node-box"><div class="empty-log">No external JavaScript files found on this website.</div></div>';
@@ -596,10 +596,10 @@
                     `).join('');
                 }
 
-                // API Discovery Render
+                // API Discovery
                 const apiList = document.getElementById('apiDiscoveryList');
                 if(!dataset.endpoints || dataset.endpoints.length === 0) {
-                    apiList.innerHTML = '<div class="empty-log">No dynamic backend API paths detected in static analysis.</div>';
+                    apiList.innerHTML = '<div class="empty-log">No dynamic backend API paths detected in analysis.</div>';
                 } else {
                     apiList.innerHTML = dataset.endpoints.map(endpoint => `
                         <li class="api-item">📍 ${endpoint}</li>
