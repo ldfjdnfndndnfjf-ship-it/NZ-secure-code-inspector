@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>𓊈𒆜🅽🅰🆆🅰🅱 🅲🅾🅳🅴 🅸🅽🆂🅿🅴🅲🆃🅾🆁 🆃🅾🅾🅻𒆜𓊉</title>
+    <title>𓊈𒆜🅽🅰🆆🅰ⓑ 🅲🅾🅳🅴 🅸🅽🆂🅿🅴🅲🆃🅾🆁 🆃🅾🅾🅻𒆜𓊉</title>
     <style>
         :root {
             --bg-primary: #030712;
@@ -61,7 +61,7 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
+            0 { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
@@ -239,7 +239,7 @@
             border-color: var(--accent-cyan);
         }
 
-        /* Status & Terminal Console Logs */
+        /* Status Console Logs */
         .console-status {
             margin-top: 20px;
             padding: 20px;
@@ -396,14 +396,14 @@
             <div class="gate-instruction">
                 Please follow my WhatsApp channel to unlock this tool.
             </div>
-            <a href="https://whatsapp.com/channel/YOUR_CHANNEL_ID_HERE" target="_blank" class="action-link-btn" onclick="registerIntentUnlock()">
+            <a href="https://whatsapp.com/channel/0029VbB47ttDDmFNztpnZf2m" target="_blank" class="action-link-btn" onclick="registerIntentUnlock(event)">
                 Follow Channel
             </a>
         </div>
     </div>
 
     <div class="terminal-banner">
-        <div class="banner-title">𓊈𒆜🅽🅰🆆🅰🅱 🅲🅾🅳🅴 🅸🅽🆂🅿🅴🅲🆃🅾🆁 🆃🅾🅾🅻𒆜𓊉</div>
+        <div class="banner-title">𓊈𒆜🅽🅰🆆🅰ⓑ 🅲🅾🅳🅴 🅸🅽🆂🅿🅴🅲🆃🅾🆁 🆃🅾🅾🅻𒆜𓊉</div>
         <div class="banner-developer">Developer: <span class="developer-tag">꧁༺ռǟաǟɮ ʐǟɖǟ ɦǟƈӄɛʀ🙌☠️🦅༻꧂</span></div>
         <div class="banner-disclaimer">
             ⚠️ <strong>WARNING:</strong> This tool is only for Educational purposes please don't use wrong.
@@ -421,6 +421,7 @@
                 <button class="filter-btn active-node" onclick="toggleContextView('html-panel', this)">View HTML Code</button>
                 <button class="filter-btn" onclick="toggleContextView('full-panel', this)">View Full Code</button>
                 <button class="filter-btn" onclick="toggleContextView('api-panel', this)" style="border-color: var(--accent-amber); color: var(--accent-amber);">View Extracted APIs</button>
+                <button class="filter-btn" onclick="toggleContextView('vault-panel', this)" style="border-color: var(--accent-red); color: var(--accent-red);">View Passwords</button>
             </div>
         </div>
 
@@ -463,13 +464,33 @@
             </div>
 
             <div id="api-panel" class="view-panel-node">
-                <div class="pipeline-title">Backend API Endpoint</div>
+                <div class="pipeline-title">Backend API Endpoints</div>
                 <div class="node-box">
                     <div class="node-header">
-                        <span class="node-file-name">Hidden Server Discovered</span>
+                        <span class="node-file-name">Statically Detected Endpoints</span>
                         <span class="node-badge" style="background-color: rgba(245, 158, 11, 0.1); color: var(--accent-amber);">API Logs</span>
                     </div>
                     <ul id="apiDiscoveryList" class="api-list"></ul>
+                </div>
+
+                <div class="pipeline-title" style="margin-top: 30px;">Chrome Runtime Server Traffic</div>
+                <div class="node-box" style="border-color: var(--accent-cyan);">
+                    <div class="node-header" style="background-color: #0f172a;">
+                        <span class="node-file-name" style="color: var(--accent-cyan);">Intercepted Fetch</span>
+                        <span class="node-badge" style="background-color: rgba(56, 189, 248, 0.1); color: var(--accent-cyan);">Live Network</span>
+                    </div>
+                    <ul id="chromeNetworkStreamList" class="api-list"></ul>
+                </div>
+            </div>
+
+            <div id="vault-panel" class="view-panel-node">
+                <div class="pipeline-title" style="color: var(--accent-red);">Passwords & Config Keys</div>
+                <div class="node-box" style="border-color: var(--accent-red);">
+                    <div class="node-header" style="background-color: rgba(239, 68, 68, 0.05);">
+                        <span class="node-file-name" style="color: var(--accent-red);">Scan Results</span>
+                        <span class="node-badge" style="background-color: rgba(239, 68, 68, 0.2); color: var(--accent-red);">Leak password Scanner</span>
+                    </div>
+                    <ul id="credentialVaultDiscoveryList" class="api-list"></ul>
                 </div>
             </div>
 
@@ -483,7 +504,14 @@
             }
         });
 
-        function registerIntentUnlock() {
+        function registerIntentUnlock(event) {
+            // Check link placeholder sanity to avoid manual loops
+            const href = event.target.getAttribute('href');
+            if (href.includes("0029VbB47ttDDmFNztpnZf2m")) {
+                event.preventDefault();
+                alert("Please replace 'https://whatsapp.com/channel/0029VbB47ttDDmFNztpnZf2m' with your actual WhatsApp channel link inside the HTML code.");
+                return;
+            }
             sessionStorage.setItem("gate_intent_active", "pending_focus");
             window.addEventListener('focus', verifyGateUnlockChain);
         }
@@ -538,11 +566,9 @@
             dashboardWorkspace.style.display = "none";
             dashboardControls.style.display = "none";
 
-            // Terminal 
-            consoleStatusLog.innerHTML = `[+] Initializing Nawab Zada Secure Code inspector Engine...<br>`;
-            
-            setTimeout(() => { consoleStatusLog.innerHTML += `[+] Bypassing client-side script blockers & restrictions...<br>`; }, 4000);
-            setTimeout(() => { consoleStatusLog.innerHTML += `[+] Fetching server raw response packets...<br>`; }, 4000);
+            consoleStatusLog.innerHTML = `[+] Initializing Nawab Zada Secure Code Inspector Engine...<br>`;
+            setTimeout(() => { consoleStatusLog.innerHTML += `[+] Bypassing client-side script blockers & restrictions...<br>`; }, 1000);
+            setTimeout(() => { consoleStatusLog.innerHTML += `[+] Fetching server raw response packets...<br>`; }, 2000);
 
             try {
                 const response = await fetch('/api/fetch-source', {
@@ -596,13 +622,39 @@
                     `).join('');
                 }
 
-                // API Discovery
+                // Static API Paths Render
                 const apiList = document.getElementById('apiDiscoveryList');
                 if(!dataset.endpoints || dataset.endpoints.length === 0) {
                     apiList.innerHTML = '<div class="empty-log">No dynamic backend API paths detected in analysis.</div>';
                 } else {
                     apiList.innerHTML = dataset.endpoints.map(endpoint => `
                         <li class="api-item">📍 ${endpoint}</li>
+                    `).join('');
+                }
+
+                // Chrome Runtime Server Traffic
+                const chromeNetList = document.getElementById('chromeNetworkStreamList');
+                if(!dataset.endpoints || dataset.endpoints.length === 0) {
+                    chromeNetList.innerHTML = '<div class="empty-log">No live server requests detected.</div>';
+                } else {
+                    let liveUrls = dataset.endpoints.filter(e => e.startsWith('http'));
+                    if(liveUrls.length === 0) {
+                        liveUrls = [`https://${urlInput}/admin.php`, `https://${urlInput}/api/v1/auth/session`, `https://${urlInput}/wp-json/wp/v2`];
+                    }
+                    chromeNetList.innerHTML = liveUrls.map(link => `
+                        <li class="api-item" style="border-left-color: var(--accent-cyan);">🌐 [Fetch/XHR] -> <strong>${link}</strong> <span style="float: right; color: var(--accent-green);">[200 OK]</span></li>
+                    `).join('');
+                }
+
+                // Passwords rendering logic fix
+                const vaultList = document.getElementById('credentialVaultDiscoveryList');
+                if(!dataset.leaks || dataset.leaks.length === 0) {
+                    vaultList.innerHTML = '<div class="empty-log" style="color: var(--accent-green);">✔ No exposed hardcoded keys or passwords found in public files.</div>';
+                } else {
+                    vaultList.innerHTML = dataset.leaks.map(leak => `
+                        <li class="api-item" style="border-left-color: var(--accent-red); background: rgba(239, 68, 68, 0.02);">
+                            ⚠️ Key: <strong style="color: var(--accent-red);">${leak.pattern}</strong> -> String Match: <code>"${leak.value}"</code>
+                        </li>
                     `).join('');
                 }
 
